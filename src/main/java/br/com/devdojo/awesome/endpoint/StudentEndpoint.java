@@ -1,6 +1,7 @@
 package br.com.devdojo.awesome.endpoint;
 
 import br.com.devdojo.awesome.error.CustomErrorType;
+import br.com.devdojo.awesome.error.ResourceNotFoundException;
 import br.com.devdojo.awesome.model.Student;
 import br.com.devdojo.awesome.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,8 @@ public class StudentEndpoint {
     @GetMapping(path = "/{id}")
     //@RequestMapping(method = RequestMethod.GET, path = "/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable("id") Long id){
+        verifyIfStudentExists(id);
         Optional<Student> student = studentDao.findById(id);
-        //System.out.println("Consultado id "+id+" :" + dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        if(student == null)
-            return new ResponseEntity<>(new CustomErrorType("Student not found"), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
     @GetMapping(path = "/findByName/{name}")
@@ -52,14 +51,21 @@ public class StudentEndpoint {
     @DeleteMapping(path= "/{id}")
     //@RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
+        verifyIfStudentExists(id);
         studentDao.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PutMapping
     //@RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody Student student){
+        verifyIfStudentExists(student.getId());
         studentDao.save(student);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void verifyIfStudentExists(long id){
+        if(!studentDao.existsById(id))
+            throw new ResourceNotFoundException("Student not found by ID:"+id);
     }
 
 }
