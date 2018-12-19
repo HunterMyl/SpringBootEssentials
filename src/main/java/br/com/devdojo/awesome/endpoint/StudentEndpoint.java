@@ -1,6 +1,5 @@
 package br.com.devdojo.awesome.endpoint;
 
-import br.com.devdojo.awesome.error.CustomErrorType;
 import br.com.devdojo.awesome.error.ResourceNotFoundException;
 import br.com.devdojo.awesome.model.Student;
 import br.com.devdojo.awesome.repository.StudentRepository;
@@ -9,11 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-
-import static java.util.Arrays.asList;
 
 @RestController
 @RequestMapping("students")
