@@ -4,6 +4,7 @@ import br.com.devdojo.awesome.error.ResourceNotFoundException;
 import br.com.devdojo.awesome.model.Student;
 import br.com.devdojo.awesome.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,9 @@ public class StudentEndpoint {
 
     @GetMapping
     //@RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> listAll(){
+    public ResponseEntity<?> listAll(Pageable pageable){
         //System.out.println("Lista completa: " + dateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
-        return new ResponseEntity<>(studentDao.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(studentDao.findAll(pageable), HttpStatus.OK);
     }
     @GetMapping(path = "/{id}")
     //@RequestMapping(method = RequestMethod.GET, path = "/{id}")
